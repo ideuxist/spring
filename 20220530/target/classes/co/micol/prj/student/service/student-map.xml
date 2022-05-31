@@ -30,7 +30,7 @@
 
 	<delete id="studentDelete"
 		parameterType="co.micol.prj.student.vo.StudentVO">
-		delete from student where id = #{id}
+		DELETE FROM STUDENT WHERE ID = #{id}
 	</delete>
 
 	<select id="idCheck" parameterType="String" resultType="boolean">

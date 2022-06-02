@@ -30,7 +30,7 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public int noticeUpdate(NoticeVO vo) {
+	public int noticeUpdate(NoticeVO vo) { 
 		return map.noticeUpdate(vo);
 	}
 

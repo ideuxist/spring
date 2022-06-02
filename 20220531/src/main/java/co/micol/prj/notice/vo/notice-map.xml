@@ -29,10 +29,10 @@
 	
 	<insert id = "noticeInsert" parameterType="co.micol.prj.notice.vo.NoticeVO">
 		<selectKey resultType="int" keyProperty="noticeId" order="BEFORE">
-		SELECT case when MAX(NOTICE_ID) != NULL THEN MAX(NOTICE_ID)+1
+		SELECT case when MAX(NOTICE_ID) != 0 THEN MAX(NOTICE_ID)+1
 			   ELSE 1 END AS ID FROM NOTICE
 		</selectKey>
-		INSERT INTO NOTICE
+		INSERT INTO NOTICE (notice_id,notice_name,notice_title,notice_contents,notice_date,notice_hit,notice_attech,notice_dir)
 		VALUES(#{noticeId},#{noticeName},#{noticeTitle},
 		#{noticeContents},#{noticeDate},0,
 		#{noticeAttech},#{noticeDir})
@@ -46,7 +46,7 @@
 			<if test = "noticeContents != null">NOTICE_CONTENTS=#{noticeContents},</if>
 			<if test = "noticeDate != null">NOTICE_DATE=#{noticeDate},</if>
 			<if test = "noticeAttech != null">NOTICE_ATTECH=#{noticeAttech},</if>
-			<if test = "noticeDir != null">NOTICE_DIR=#{noticeDir},</if>
+			<if test = "noticeDir != null">NOTICE_DIR=#{noticeDir}</if>
 		</set>
 		WHERE NOTICE_ID=#{noticeId}
 	</update>

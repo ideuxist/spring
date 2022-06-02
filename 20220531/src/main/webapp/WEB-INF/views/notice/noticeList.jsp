@@ -8,27 +8,28 @@
 <title>Insert title here</title>
 </head>
 <style>
-	table tr:hover{
-	cursor :pointer;
+table tr:hover {
+	cursor: pointer;
 	background: gray;
-	
-	}
+}
 </style>
 <body>
 	<div align="center">
-		<div><h1>공지사항 목록</h1></div>
 		<div>
-			<form id="frm" action="" method="post">
-				<select  id="state" name="state">
+			<h1>공지사항 목록</h1>
+		</div>
+		<div>
+			<form id="frm">
+				<select id="state" name="state">
 					<option value="1">전 체</option>
 					<option value="2">작성자</option>
 					<option value="3">제 목</option>
 					<option value="4">내 용</option>
-				</select>&nbsp;
-				<input type ="text" id="key" name="key">&nbsp;
-				<button type = "button" onclick="searchNotice()">검색</button>
+				</select>&nbsp; <input type="text" id="key" name="key">&nbsp;
+				<button type="button" onclick="searchList()">검색</button>
 			</form>
-		</div><br/>
+		</div>
+		<br />
 		<div>
 			<table id="tb" border="1">
 				<thead>
@@ -41,8 +42,8 @@
 						<th width="70">첨부파일</th>
 					</tr>
 				</thead>
-				<tbody>
-					<c:if test = "${ not empty notices}">
+				<tbody id="tbody">
+					<c:if test="${ not empty notices}">
 						<c:forEach items="${notices }" var="n">
 							<tr>
 								<td>${n.noticeId }</td>
@@ -60,14 +61,16 @@
 						</tr>
 					</c:if>
 				</tbody>
-				
+
 			</table>
-				<form id ="frm2" action="getContent.do" method="post">
-				<input type ="hidden" id = "noticeId" name="noticeId">
-				</form>
-		</div><br>
+			<form id="frm2" action="getContent.do" method="post">
+				<input type="hidden" id="noticeId" name="noticeId">
+			</form>
+		</div>
+		<br>
 		<div>
-			<button type="button" onclick="location.href='noticeInsertForm.do'">글 등록</button>
+			<button type="button" onclick="location.href='noticeInsertForm.do'">글
+				등록</button>
 		</div>
 	</div>
 </body>
@@ -82,7 +85,36 @@ list.addEventListener('click',function(ev){
 	frm2.submit();
 	}
 })
+</script>
+<script type="text/javascript">
+function searchList(){
+	let list = document.querySelector('tbody')
+	let tb="<tr/>"
+	let tbody=document.createElement('tbody')
+	console.log(tbody)
+	fetch('ajaxSearchList.do',{
+	method:'POST',
+	body:new FormData(document.getElementById('frm'))
+	})
+	.then(response=>response.json())
+	
+	.then(data=>{
+	list.remove();
+	console.log(data);
+	data.forEach(n=>{
+		let tr = document.createElement('tr');
+		for (const val in n){
+			console.log(n[val]);
+			let td=document.createElement('td');
+			td.innerHTML=n[val];
+			tr.appendChild(td)
+		}
+		tbody.appendChild(tr)
+	})
+})
+}	
 		
-		
+	
+
 </script>
 </html>

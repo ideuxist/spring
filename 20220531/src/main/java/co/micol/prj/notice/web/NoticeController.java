@@ -3,10 +3,13 @@ package co.micol.prj.notice.web;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +17,8 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.micol.prj.notice.service.NoticeService;
 import co.micol.prj.notice.vo.NoticeVO;
@@ -32,15 +33,6 @@ public class NoticeController {
 
 	@RequestMapping("/noticeList.do")
 	public String noticeList(Model model) {
-		ObjectMapper list = new ObjectMapper();
-		try {
-			list.writeValueAsString(noticeDao.noticeSelectList(1, "전체"));
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(list);
-		
 		model.addAttribute("notices", noticeDao.noticeSelectList(1, "전체"));
 		return "notice/noticeList";
 	}
@@ -137,17 +129,22 @@ public class NoticeController {
 			
 			vo.setNoticeAttech(fileName); //파일명
 			vo.setNoticeDir(saveFileName); //실제저장경로 담고
-			try {
+			try { 
 				FileCopyUtils.copy(file.getBytes(), target);// 실제 파일을 저장
 			} catch (Exception e) {
-				e.printStackTrace();
+				e.printStackTrace();  
 			}
-			
+			 
 		}
 		noticeDao.noticeUpdate(vo);
-		return "redirect:noticeList.do";
+		return "redirect:noticeList.do";  
 	}
-}
+	@PostMapping("/ajaxSearchList.do")
+	@ResponseBody
+	public List<NoticeVO> ajaxSearchList(@RequestParam("state")int state, @RequestParam("key") String key){
+		return noticeDao.noticeSelectList(state, key);
+	}
+} 
 
 
 

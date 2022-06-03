@@ -18,7 +18,7 @@
 		where
 		<if test="state==1">1=1</if>
 		<if test="state==2">NOTICE_NAME=#{key}</if>
-		<if test="state==3">NOTICE_TITLE LIKE '%|| #{key} ||%'</if>
+		<if test="state==3">NOTICE_TITLE LIKE '%' ||#{key}|| '%'</if>
 		<if test="state==4">NOTICE_CONTENTS LIKE '%'|| #{key} ||'%'</if>
 		ORDER BY NOTICE_ID DESC
 	</select>

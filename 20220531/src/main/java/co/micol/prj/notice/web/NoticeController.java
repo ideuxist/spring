@@ -132,14 +132,14 @@ public class NoticeController {
 			try { 
 				FileCopyUtils.copy(file.getBytes(), target);// 실제 파일을 저장
 			} catch (Exception e) {
-				e.printStackTrace();  
+				e.printStackTrace();   
 			}
 			 
 		}
-		noticeDao.noticeUpdate(vo);
+		noticeDao.noticeUpdate(vo); 
 		return "redirect:noticeList.do";  
 	}
-	@PostMapping("/ajaxSearchList.do")
+	@PostMapping("/ajaxSearchList.do")  
 	@ResponseBody
 	public List<NoticeVO> ajaxSearchList(@RequestParam("state")int state, @RequestParam("key") String key){
 		return noticeDao.noticeSelectList(state, key);

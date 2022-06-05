@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kkw.prj.board.service.BoardMapper">
+
+
+	<resultMap type="co.kkw.prj.board.vo.BoardVO" id="boardMap">
+		<id property="boardId" column="board_id" />
+		<result property="boardName" column="board_name" />
+		<result property="boardPassword" column="board_password" />
+		<result property="boardTitle" column="board_title" />
+		<result property="boardContent" column="board_content" />
+		<result property="boardHit" column="board_hit" />
+		<result property="boardDate" column="board_date" />
+		<result property="boardAttach" column="board_attach" />
+		<result property="boardDir" column="board_dir" />
+	</resultMap>
+	
+	<select id ="boardSelectList" resultMap="boardMap">
+		select * from board
+		order by board_id desc 
+	</select>
+	
+	<select id ="boardSelect" resultMap="boardMap">
+		select * from board
+		where board_id=#{boardId}
+	</select>
+	
+	<insert id="boardInsert" parameterType="co.kkw.prj.board.vo.BoardVO">
+		<selectKey resultType="int" keyProperty="boardId" order="BEFORE">
+		SELECT case when MAX(BOARD_ID) != 0 THEN MAX(board_ID)+1
+			   ELSE 1 END AS ID FROM BOARD
+		</selectKey>
+		insert into board(board_id,board_name,board_password,board_title,board_content,board_hit,board_date,board_attach,board_dir)
+		values (#{boardId},#{boardName},#{boardPassword},#{boardTitle},#{boardContent},#{boardHit},#{boardDate},null,null)
+	</insert>
+	
+	<update id = "boardUpdate" parameterType="co.kkw.prj.board.vo.BoardVO">
+		update board
+		<set>
+			<if test="boardName !=null">board_name=#{boardName},</if>
+			<if test="boardName !=null">board_title=#{boardTitle},</if>
+			<if test="boardName !=null">board_content=#{boardContent},</if>
+		</set>
+		where board_id=#{boardId}
+	</update>
+	
+	<update id = "boardHitUpdate" parameterType="int">
+		update board
+		set board_hit=board_hit+1 
+		where board_id=#{id}	
+	</update>
+	
+	<delete id="boardDelete" parameterType="co.kkw.prj.board.vo.BoardVO">
+		delete from board where board_id=#{boardId}
+	</delete>
+	
+</mapper>
